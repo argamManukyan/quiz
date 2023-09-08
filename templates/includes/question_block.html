@@ -1,0 +1,22 @@
+<h2>{{ question.question }}</h2>
+<form action="" style="margin-top: 10px" class="quiz-lock">
+    {% if quiz_pass %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <input type="hidden" name="question" value="{{ question.id }}">
+        {% include 'includes/answers.html' with answers=question.answers.all %}
+        {% if question %}
+            {% if is_last %}
+                <button type="button" class="btn btn-info" onclick="sendAnswer()">Finish</button>
+            {% else %}
+                <button type="button" class="btn btn-success" onclick="sendAnswer()">Next</button>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</form>

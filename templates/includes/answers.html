@@ -1,0 +1,11 @@
+{% for ans in answers %}
+    <div class="form-check">
+        <input class="form-check-input"
+               type="radio" name="answer" id="answer_{{ ans.id }}"
+               value="{{ ans.id }}"
+        >
+        <label class="form-check-label" for="answer_{{ ans.id }}" id="answer_label_{{ ans.id }}">
+            {{ ans.answer }}
+        </label>
+    </div>
+{% endfor %}

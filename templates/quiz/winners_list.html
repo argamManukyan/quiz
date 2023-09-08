@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 150px">
+            <div class="col-md-6" style="margin: 0 auto;">
+                <ul class="list-group">
+                    {% for player in sorted_players %}
+                        <li class="list-group-item">{{ player.full_name }} <span><b> || {{ player.score_sum }}</b></span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

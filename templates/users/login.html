@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 150px;">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="col-md-6" style="margin: 0 auto;">
+                <form action="{% url 'login' %}" method="post">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control">
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: 10px">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
