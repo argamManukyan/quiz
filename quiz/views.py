@@ -54,7 +54,7 @@ class AnswerQuizView(View):
     def post(self, request: HttpRequest, *args, **kwargs):
 
         if not request.user.is_authenticated:
-            return exceptions.UnAuthorizedResponse
+            return exceptions.UnAuthorizedResponse()
 
         data = json.loads(request.body)
         question_id = data.pop('question', '')

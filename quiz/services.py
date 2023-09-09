@@ -63,37 +63,35 @@ class AnswerQuizAPIService:
         """Validates and gives quiz and filtered question"""
 
         if not question_id or not answer_id:
-            return exceptions.InvalidDataResponse
+            return exceptions.InvalidDataResponse()
 
         question = question_repo.filter_question(dict(id=question_id))
 
         answer = answer_repo.get_answers(filter_params=dict(id=answer_id)).first()
 
         if not question.first():
-            return exceptions.QuestionUndefinedResponse
+            return exceptions.QuestionUndefinedResponse()
 
         if not answer:
-            return exceptions.AnswerUndefinedResponse
+            return exceptions.AnswerUndefinedResponse()
 
         correct_question = question_repo.filter_question(params=dict(id=question_id, answers__in=[answer_id]))
 
         if not correct_question.exists():
-            return exceptions.AnswerDoesNotBelongToQuestionResponse
+            return exceptions.AnswerDoesNotBelongToQuestionResponse()
 
         quiz: UserQuiz = user_quiz_repo.filter_user_quiz(
             params=dict(user_id=request.user.id, passed=False)
         ).order_by('-id').first()
 
         if not quiz:
-            return exceptions.NotActiveQuizResponse
+            return exceptions.NotActiveQuizResponse()
 
         if not user_quiz_repo.filter_user_quiz(params=dict(question__in=[question_id], id=quiz.id)).exists():
-            return exceptions.QuestionDoesNotBelongToQuizResponse
-            # if not quiz.question.filter(id__in=[question_id]).exists():
+            return exceptions.QuestionDoesNotBelongToQuizResponse()
 
         if user_quiz_repo.filter_user_quiz(params=dict(quiz_answers__question_id=question_id, id=quiz.id)):
-            # if quiz.quiz_answers.filter().exists():
-            return exceptions.AlreadyAnsweredResponse
+            return exceptions.AlreadyAnsweredResponse()
 
         return quiz, correct_question
 
