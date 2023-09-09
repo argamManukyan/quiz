@@ -11,18 +11,18 @@ const sendAnswer = () => {
         method: "POST",
         body: JSON.stringify(formObj)
     }).then(res => res.json()).then(data =>{
-        if(!data.quiz_pass){
-            const rightAnswer = document.querySelector(`#answer_label_${data.right_answer}`);
-            if (data.given_answer !== data.right_answer) {
-                const wrongAnswer = document.querySelector(`#answer_label_${data.given_answer}`);
-                wrongAnswer.style.color = "red";
+        if(data.message) {
+            if (!data.message.quiz_pass) {
+                const rightAnswer = document.querySelector(`#answer_label_${data.message.right_answer}`);
+                if (data.given_answer !== data.message.right_answer) {
+                    const wrongAnswer = document.querySelector(`#answer_label_${data.message.given_answer}`);
+                    wrongAnswer.style.color = "red";
+                }
+                rightAnswer.style.color = "green";
             }
-            rightAnswer.style.color = "green";
             setTimeout(() => {
-                document.querySelector('#quiz_body').innerHTML = data.result
+                document.querySelector('#quiz_body').innerHTML = data.message.result
             }, 1000)
-        }else{
-            document.querySelector('#quiz_body').innerHTML = data.result
         }
     })
 }
