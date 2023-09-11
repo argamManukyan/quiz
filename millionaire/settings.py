@@ -91,12 +91,24 @@ WSGI_APPLICATION = "millionaire.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "quizes",
-        "PASSWORD": "argam1998",
-        "USER": "postgres",
-        "PORT": "5432"
+        "NAME": os.environ.get('POSTGRES_DB'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
+        "USER": os.environ.get('POSTGRES_USER'),
+        "PORT":os.environ.get('POSTGRES_PORT'),
+        "HOST": "db"
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "quizes",
+#         "PASSWORD": "argam1998",
+#         "USER": "postgres",
+#         "PORT": "5432",
+#     }
+# }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

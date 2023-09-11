@@ -6,8 +6,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 
 from millionaire.utils import handle_success_response
-from quiz import exceptions
-from millionaire import messages as custom_messages
+from millionaire import messages as custom_messages, exceptions
 from millionaire.constants import MAX_QUESTIONS_NUM, TOP_PLAYERS_LIMIT
 from quiz.models import Question, UserQuiz, UserQuizResult
 from quiz.repository import question_repo, user_quiz_repo, answer_repo, user_quiz_result_repo

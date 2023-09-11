@@ -1,6 +1,7 @@
 import functools
 from typing import Callable, Union
 
+from django.contrib import messages
 from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -37,3 +38,24 @@ def handle_fail_response(message: str, status_code=400) -> JsonResponse:
 def handle_success_response(message: Union[str, dict], status_code=200):
     """Success response handler"""
     return JsonResponse({constants.SUCCESS_MESSAGE_KEY: message}, status=status_code)
+
+
+class MessagingActions:
+    @classmethod
+    def messaging_fail(cls, message, request):
+        """Messaging fail actions"""
+        messages.add_message(
+            request,
+            level=messages.ERROR,
+            message=message,
+            extra_tags=constants.DANGER_TAG
+        )
+
+    @classmethod
+    def messaging_success(cls, message, request):
+        """Messaging success actions"""
+        messages.add_message(
+            request,
+            level=messages.SUCCESS,
+            message=message,
+        )

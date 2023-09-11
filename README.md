@@ -14,3 +14,6 @@
 
   ```docker-compose up build```
   
+**Credentials**
+ - User the credentials bellow for signing admin panel
+ - ```username: admin, password:admin```

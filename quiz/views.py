@@ -7,8 +7,7 @@ from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from quiz import exceptions
-from millionaire import constants, messages as custom_messages
+from millionaire import constants, messages as custom_messages, exceptions
 from quiz.services import QuizPageService as quiz_page_service, TopPlayersPageService
 from quiz.services import AnswerQuizAPIService as answer_quiz_api_service
 
@@ -47,9 +46,6 @@ def quiz_page(request):
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AnswerQuizView(View):
-
-    # @staticmethod
-    #
 
     def post(self, request: HttpRequest, *args, **kwargs):
 
@@ -97,9 +93,7 @@ class AnswerQuizView(View):
             question_id_list=question_id_list,
             quiz_id=quiz.id
         )
-        print(
-            question_id_list
-        )
+
         # combine response
         return answer_quiz_api_service.combine_response(
             question_id=question_id,

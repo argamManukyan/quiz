@@ -60,7 +60,7 @@ class UserQuizRepository:
 
     @classmethod
     def annotate_players(cls):
-        return cls.model.objects.annotate(
+        return cls.model.objects.filter(passed=True).annotate(
             full_name=Concat(
                 F('user__first_name'),
                 Value(' '), F('user__last_name'),

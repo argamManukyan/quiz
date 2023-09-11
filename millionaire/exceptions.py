@@ -11,3 +11,4 @@ QuestionDoesNotBelongToQuizResponse = partial(handle_fail_response, message=mess
 NotActiveQuizResponse = partial(handle_fail_response, message=messages.NOT_ACTIVE_QUIZ)
 AlreadyAnsweredResponse = partial(handle_fail_response, message=messages.ALREADY_ANSWERED)
 UnAuthorizedResponse = partial(handle_fail_response, message=messages.UNAUTHORIZED, status_code=401)
+UserDoesNotExists = partial(handle_fail_response, message=messages.USER_DOES_NOT_EXISTS, status_code=400)()

@@ -1,55 +1,33 @@
-import time
-
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from millionaire.utils import check_is_user_logged
-
-User = get_user_model()
+from millionaire import messages as custom_messages
+from users.services import login_page_service, register_page_service
 
 
 @check_is_user_logged
 def register(request):
     """Creating new user accounts"""
+
     if request.method == 'POST':
         try:
 
-            # Getting requested data
-            first_name = request.POST.get("first_name")
-            last_name = request.POST.get("last_name")
-            password = request.POST.get("password", "")
-            username = f"{first_name}_{int(time.time())}"  # My version of username generation
+            # Create user
+            obj = register_page_service.create_user(request)
 
-            # Just password validation example (Not included regexp checking for symbols and uppercase's and digits )
-            if len(password) < 3:
-                messages.add_message(
-                    request,
-                    level=messages.ERROR,
-                    message=f"Password should contains at least 3 symbols",
-                    extra_tags="danger"
-                )
+            if not obj:
                 return redirect("register")
 
-            # User creation
-            User.objects.create_user(
-                username=username,
-                password=password,
-                first_name=first_name,
-                last_name=last_name
+            register_page_service.messaging_success(
+                message=custom_messages.USER_CREATED.format(obj.username),
+                request=request
             )
-
-            messages.success(request, f"User created successfully, your username is {username}")
 
             return redirect("login")
         except Exception as e:
-            messages.add_message(
-                request,
-                level=messages.ERROR,
-                message=f"{e.args}",
-                extra_tags="danger"
-            )
+            register_page_service.messaging_fail(message=f"{e.args}", request=request)
 
     return render(request, "users/register.html")
 
@@ -62,43 +40,24 @@ def login_user(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        user = User.objects.filter(username=username).first()  # Getting the first matching object
+        user = login_page_service.find_user(username)
 
         if not user:
-            messages.add_message(
-                request,
-                level=messages.ERROR,
-                message="User with given username does not exists",
-                extra_tags="danger"
-            )
-
+            login_page_service.messaging_fail(message=custom_messages.USER_DOES_NOT_EXISTS, request=request)
             return redirect("login")
 
         # Checking is the user password true
         if not user.check_password(password):
-
-            messages.add_message(
-                request,
-                level=messages.ERROR,
-                message="The credentials are incorrect, please try again.",
-                extra_tags="danger"
-            )
-
+            login_page_service.messaging_fail(message=custom_messages.INVALID_CREDENTIALS, request=request)
             return redirect("login")
 
         user = authenticate(username=username, password=password)
         if not user:
-            messages.add_message(
-                request,
-                level=messages.ERROR,
-                message="The credentials are incorrect, please try again.",
-                extra_tags="danger"
-            )
-
+            login_page_service.messaging_fail(message=custom_messages.INVALID_CREDENTIALS, request=request)
             return redirect("login")
 
         login(request, user)
-        messages.success(request, "You are logged in successfully")
+        login_page_service.messaging_success(message=custom_messages.LOGGED, request=request)
         return redirect("quiz_page")
 
     return render(request, "users/login.html")

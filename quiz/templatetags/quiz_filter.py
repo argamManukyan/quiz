@@ -11,3 +11,4 @@ def question_filter(userquiz):
     answered_questions = userquiz.question.filter(~Q(id__in=passed_questions))
     if answered_questions:
         return answered_questions.first()
+    return []
